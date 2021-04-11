@@ -1,0 +1,60 @@
+/* From LiteraturniRazgovori */
+.recent-posts
+{
+    .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+        font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    .maxthumb {
+        max-height: 300px;
+        overflow: hidden;
+    }
+
+    .card:hover .img-fluid {
+        filter: grayscale(0%);
+        -webkit-filter: grayscale(0%);
+    }
+    
+    .card .img-fluid{
+        width: 100%;
+        -webkit-filter: grayscale(100%);
+        filter: grayscale(100%);
+    }
+    
+    .card-body {
+        font-family: "nicebgfontsemilight";
+    }
+    
+    .card .img-fluid {
+        width: 100%;
+        -webkit-filter: grayscale(100%);
+        filter: grayscale(100%);
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .mb-30px {
+        margin-bottom: 30px;
+    }
+    
+    
+    .listfeaturedtag h2.card-title, .listrecent h2.card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.25;
+    }
+
+    .listfeaturedtag h4.card-text, .listrecent h4.card-text {
+        color: rgba(0,0,0,.44);
+        font-size: 0.95rem;
+        line-height: 1.4;
+        font-weight: 400;
+    }
+
+    .card-title {
+        margin-bottom: .75rem;
+    }    
+}
