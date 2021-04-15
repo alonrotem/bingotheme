@@ -69,46 +69,7 @@ var collections =
     }
   ];
 
-  if(window.netlifinityModules && window.netlifinityModules.length > 0)
-  {
-    
-      for(var m=0; m < window.netlifinityModules.length; m++)
-      {
-          collections.push(window.netlifinityModules[m]["config"]);
-      }
-  }
 
-
-var configurations = 
-{
-    "development": {
-        "config": {
-        "backend": {
-            "name": "git-gateway"
-        },
-        "local_backend": true,
-        "load_config_file": false,
-        "media_folder": "Uploads",
-        "public_folder": "Uploads",
-        "collections": collections
-        }
-    },
-    "production": {
-        "config": {
-        "backend": {
-            "name": "github",
-            "repo": "mastilnicata/mastilnicata.github.io",
-            "branch": "work",
-            "base_url": "https://warm-woodland-78106.herokuapp.com"
-        },
-        "local_backend": true,
-        "load_config_file": false,
-        "media_folder": "Uploads",
-        "public_folder": "Uploads",
-        "collections": collections
-        }
-    }
-}
 
 function loadScript(url, callback)
 {
@@ -123,15 +84,59 @@ function loadScript(url, callback)
     script.onreadystatechange = callback;
     script.onload = callback;
 
-    console.log("appeding script");
+    console.log("appeding script " + url.substr(url.lastIndexOf("/")+1));
     // Fire the loading
     head.appendChild(script);
 }
 
 function custom()
 {
-    console.log("main script loaded. running custom script");
+   console.log("main script loaded. running custom script");
     window.CMS_MANUAL_INIT = true
+
+    if(window.netlifinityModules && window.netlifinityModules.length > 0)
+    {
+      
+        for(var m=0; m < window.netlifinityModules.length; m++)
+        {
+            collections.push(window.netlifinityModules[m]["config"]);
+        }
+    }
+  
+    console.log(collections);
+  
+  
+  var configurations = 
+  {
+      "development": {
+          "config": {
+          "backend": {
+              "name": "git-gateway"
+          },
+          "local_backend": true,
+          "load_config_file": false,
+          "media_folder": "Uploads",
+          "public_folder": "Uploads",
+          "collections": collections
+          }
+      },
+      "production": {
+          "config": {
+          "backend": {
+              "name": "github",
+              "repo": "mastilnicata/mastilnicata.github.io",
+              "branch": "work",
+              "base_url": "https://warm-woodland-78106.herokuapp.com"
+          },
+          "local_backend": true,
+          "load_config_file": false,
+          "media_folder": "Uploads",
+          "public_folder": "Uploads",
+          "collections": collections
+          }
+      }
+  }
+
 
     var env = "{{jekyll.environment}}";
     if(!configurations[env])
@@ -144,11 +149,17 @@ function custom()
     {
         for(var m=0; m < window.netlifinityModules.length; m++)
         {
+            alert("registering widget: " + window.netlifinityModules[m]["modulename"]);
             CMS.registerWidget(
                 window.netlifinityModules[m]["modulename"], 
                 createClass(window.netlifinityModules[m]["control"]),
                 createClass(window.netlifinityModules[m]["preview"])
             );
+
+            if(window.netlifinityModules[m]["callback"])
+            {
+                window.netlifinityModules[m]["callback"]();
+            }
         }
     }
 }

@@ -30,14 +30,15 @@ if (!window.loadScript) {window.loadScript = function (url, callback)
         script.onreadystatechange = callback;
         script.onload = callback;
     }
-    console.log("appeding script");
+    console.log("appeding script " + url.substr(url.lastIndexOf("/")+1));
     // Fire the loading
     head.appendChild(script);
 }}
 
-window.loadScript("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js");
-window.loadScript("scripts/Netlifinity/bootstrap-iconpicker.min.js");
-window.loadScript("scripts/Netlifinity/jquery-menu-editor.min.js");
+window.loadScript("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js", function(){
+  window.loadScript("scripts/Netlifinity/arrive.js", function (){
+    window.loadScript("scripts/Netlifinity/bootstrap-iconpicker.min.js", function (){
+      window.loadScript("scripts/Netlifinity/jquery-menu-editor.min.js", function (){
 
 
 //-----------------------------
@@ -398,26 +399,9 @@ var menueditorcontrol = {
 */
 
       //----------
-      var ctl = h('ul', { 'className': 'sortableLists list-group', 'id': 'netlifinityMenuEditor' });
+      var ctl = h('ul', { 'className': 'sortableLists list-group waitforit', 'id': 'netlifinityMenuEditor' });
 
-      var iconPickerOptions = {searchText: "Buscar...", labelHeader: "{0}/{1}"};
-      // sortable list options
-      var sortableListOptions = {
-          placeholderCss: {'background-color': "#cccccc"}
-      };
       
-
-      var editor = new MenuEditor('netlifinityMenuEditor', 
-            { 
-            listOptions: sortableListOptions, 
-            iconPicker: iconPickerOptions,
-            maxLevel: 2 // (Optional) Default is -1 (no level limit)
-            // Valid levels are from [0, 1, 2, 3,...N]
-            });
-
-        //console.log(editor);
-        var arrayjson = [{"href":"http://home.com","icon":"fas fa-home","text":"Home", "target": "_top", "title": "My Home"},{"icon":"fas fa-chart-bar","text":"Opcion2"},{"icon":"fas fa-bell","text":"Opcion3"},{"icon":"fas fa-crop","text":"Opcion4"},{"icon":"fas fa-flask","text":"Opcion5"},{"icon":"fas fa-map-marker","text":"Opcion6"},{"icon":"fas fa-search","text":"Opcion7","children":[{"icon":"fas fa-plug","text":"Opcion7-1","children":[{"icon":"fas fa-filter","text":"Opcion7-1-1"}]}]}];
-        editor.setData(arrayjson);
       //----------
       return ctl;
     }
@@ -449,10 +433,45 @@ if (!window.netlifinityModules) {
     window.netlifinityModules = [];
 }
 
-window.netlifinityModules.push({ 
-    "modulename": menueditorNetlifinityModuleName, 
-    "control": menueditorcontrol, 
-    "preview": menueditorPreview,
-    "config": menurdidorconfig
-});
+
 //  CMS.registerPreviewTemplate("content-blocks", ContentBlockPreview);
+
+
+var menueditorloaded = function(){
+  alert("called menueditorloaded");
+document.arrive(".waitforit", function() {
+  alert("waitforit arrived");
+  Array.from(document.getElementsByClassName("waitforit")).forEach(function(element, index){
+debugger;
+    var iconPickerOptions = {searchText: "Buscar...", labelHeader: "{0}/{1}"};
+    // sortable list options
+    var sortableListOptions = {
+        placeholderCss: {'background-color': "#cccccc"}
+    };
+    var editor = new MenuEditor('netlifinityMenuEditor', 
+          { 
+          listOptions: sortableListOptions, 
+          iconPicker: iconPickerOptions,
+          maxLevel: 2 // (Optional) Default is -1 (no level limit)
+          // Valid levels are from [0, 1, 2, 3,...N]
+          });
+      //console.log(editor);
+      var arrayjson = [{"href":"http://home.com","icon":"fas fa-home","text":"Home", "target": "_top", "title": "My Home"},{"icon":"fas fa-chart-bar","text":"Opcion2"},{"icon":"fas fa-bell","text":"Opcion3"},{"icon":"fas fa-crop","text":"Opcion4"},{"icon":"fas fa-flask","text":"Opcion5"},{"icon":"fas fa-map-marker","text":"Opcion6"},{"icon":"fas fa-search","text":"Opcion7","children":[{"icon":"fas fa-plug","text":"Opcion7-1","children":[{"icon":"fas fa-filter","text":"Opcion7-1-1"}]}]}];
+      editor.setData(arrayjson);
+  });
+});
+};
+
+window.netlifinityModules.push({ 
+  "modulename": menueditorNetlifinityModuleName, 
+  "control": menueditorcontrol, 
+  "preview": menueditorPreview,
+  "config": menurdidorconfig,
+  "callback": menueditorloaded
+});
+
+
+});
+});
+});
+});
