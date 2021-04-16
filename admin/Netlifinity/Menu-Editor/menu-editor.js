@@ -44,15 +44,26 @@ if (!window.loadCSS) {window.loadCSS=function(fileName) {
   head.appendChild(link);
 }
 }
+/*
+<!-- the css in the <head> -->
+<!-- (Recommended) Just before the closing body tag </body> -->
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="bootstrap-iconpicker/js/iconset/fontawesome5-3-1.min.js"></script>
+<script type="text/javascript" src="bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"></script>
+<script type="text/javascript" src="jquery-menu-editor.min.js"></script>
+*/
 
-window.loadScript("Netlifinity/Common/bootstrap.bundle.min.js", function(){
 window.loadScript("Netlifinity/Menu-Editor/js/jquery.min.js", function(){
-  window.loadScript("Netlifinity/arrive.js", function (){
-    window.loadScript("Netlifinity/Menu-Editor/js/bootstrap-iconpicker.min.js", function (){
+window.loadScript("Netlifinity/Common/bootstrap.bundle.min.js", function(){
+    window.loadScript("Netlifinity/Menu-Editor/js/fontawesome5-3-1.min.js", function(){
+      window.loadScript("Netlifinity/Menu-Editor/js/bootstrap-iconpicker.min.js", function (){
       window.loadScript("Netlifinity/Menu-Editor/js/jquery-menu-editor.js", function (){
+        window.loadScript("Netlifinity/arrive.js", function (){
 
         window.loadCSS("Netlifinity/Common/bootstrap.min.css");
         window.loadCSS("Netlifinity/Menu-Editor/css/font-awesome.all.css");
+        window.loadCSS("Netlifinity/Menu-Editor/css/bootstrap-iconpicker.min.css");
         window.loadCSS("Netlifinity/netlifinity.css");
 //-----------------------------
 
@@ -413,10 +424,51 @@ var menueditorcontrol = {
 */
 
       //----------
-      var ctl = h('ul', { 'className': 'sortableLists list-group waitforit', 'id': 'netlifinityMenuEditor' });
+      var ctl = h('div', {}, 
+        h('ul', { 'className': 'sortableLists list-group waitforit', 'id': 'netlifinityMenuEditor' }),
 
-      
-      //----------
+        h('div', { 'className': 'card border-primary mb-3' },
+          h('div', { 'className': 'card-header bg-primary text-white' }, 'Edit item'),
+          h('div', { 'className': 'card-body' },
+            h('form', { 'className':'form-horizontal', 'id': 'frmEdit' },
+              h('div', { 'className':'form-group' },
+                h('label', { 'for':'text' }, 'Text'),
+                h('div', { 'className': 'input-group' }, 
+                  h('input', { 'type':'text', 'className': 'form-control item-menu', 'name': 'text', 'id': 'text', 'placeholder': 'Text' }),
+                  h('div', { 'className': 'input-group-append' },
+                    h('button', { 'type': 'button', 'id':'netlifinityMenuEditor_icon', 'className': 'btn btn-outline-secondary' })
+                  )
+                ),
+                h('input', { 'type': 'hidden', 'name':'icon', 'className':'item-menu'})
+              ),
+              h('div', { 'className':'form-group' },
+                h('label', { 'for':'href' }, 'URL'),
+                h('input', { 'type':'text','className': 'form-control item-menu', 'id':'href', 'name':'href', 'placeholder':'URL' })
+              ),
+              h('div', { 'className':'form-group' },
+                h('label', { 'for':'target' }, 'Target'),
+                h('select', { 'name':'target', 'id':'target','className':'form-control item-menu' },
+                  h('option', {'value': '_self'}, 'Self'),
+                  h('option', {'value': '_blank'}, 'Blank'),
+                  h('option', {'value': '_top'}, 'Top')
+                )
+              ),
+              h('div', { 'className':'form-group' },
+                h('label', { 'for':'title' }, 'Tooltip'),
+                h('input', { 'type':'text','className': 'form-control item-menu', 'id':'title', 'name':'title', 'placeholder':'Tooltip' })
+              )
+            )
+          ),
+          h('div', { 'className':'card-footer' },
+            h('button', { 'type':'button', 'id': 'btnUpdate', 'className':'btn btn-primary', 'disabled':'disabled' },
+              h('i', {'className': 'fas fa-sync-alt'}, 'Update')
+            ),
+            h('button', { 'type':'button', 'id': 'btnAdd', 'className':'btn btn-success' },
+              h('i', {'className': 'fas fa-plus'}, 'Add')
+            )            
+          )
+        )
+      );
       return ctl;
     }
   };
@@ -485,6 +537,7 @@ window.netlifinityModules.push({
 });
 
 
+});
 });
 });
 });
