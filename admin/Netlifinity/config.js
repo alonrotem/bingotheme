@@ -1,3 +1,5 @@
+---
+---
 window.CMS_MANUAL_INIT = true;
 
 var pagelayouts = ["default", "blank"];
@@ -139,6 +141,7 @@ function custom()
 
 
     var env = "{{jekyll.environment}}";
+    //alert("env: " + env);
     if(!configurations[env])
     {
       env = "production";
@@ -149,7 +152,7 @@ function custom()
     {
         for(var m=0; m < window.netlifinityModules.length; m++)
         {
-            alert("registering widget: " + window.netlifinityModules[m]["modulename"]);
+            //alert("registering widget: " + window.netlifinityModules[m]["modulename"]);
             CMS.registerWidget(
                 window.netlifinityModules[m]["modulename"], 
                 createClass(window.netlifinityModules[m]["control"]),

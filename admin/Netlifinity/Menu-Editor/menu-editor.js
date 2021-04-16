@@ -35,18 +35,31 @@ if (!window.loadScript) {window.loadScript = function (url, callback)
     head.appendChild(script);
 }}
 
-window.loadScript("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js", function(){
-  window.loadScript("scripts/Netlifinity/arrive.js", function (){
-    window.loadScript("scripts/Netlifinity/bootstrap-iconpicker.min.js", function (){
-      window.loadScript("scripts/Netlifinity/jquery-menu-editor.min.js", function (){
+if (!window.loadCSS) {window.loadCSS=function(fileName) {
+  var head = document.head;
+  var link = document.createElement("link");
+  link.type = "text/css";
+  link.rel = "stylesheet";
+  link.href = fileName;
+  head.appendChild(link);
+}
+}
 
+window.loadScript("Netlifinity/Common/bootstrap.bundle.min.js", function(){
+window.loadScript("Netlifinity/Menu-Editor/js/jquery.min.js", function(){
+  window.loadScript("Netlifinity/arrive.js", function (){
+    window.loadScript("Netlifinity/Menu-Editor/js/bootstrap-iconpicker.min.js", function (){
+      window.loadScript("Netlifinity/Menu-Editor/js/jquery-menu-editor.js", function (){
 
+        window.loadCSS("Netlifinity/Common/bootstrap.min.css");
+        window.loadCSS("Netlifinity/Menu-Editor/css/font-awesome.all.css");
+        window.loadCSS("Netlifinity/netlifinity.css");
 //-----------------------------
 
 /// tagsControl
 /// This is the main tag-picker control, with all its functionality
 var menueditorcontrol = {
-    
+    /*
     /// addtag
     /// Adds a tag (by string) to the selected control's collection
     addtag : function(newtag){
@@ -353,10 +366,11 @@ var menueditorcontrol = {
         input.focus();
       }
     },
-    
+    */
     /// render
     /// Renders the control with all the tags selected
     render: function() {
+      /*
       var value = this.gettags();
       
       if(value)
@@ -438,11 +452,11 @@ if (!window.netlifinityModules) {
 
 
 var menueditorloaded = function(){
-  alert("called menueditorloaded");
+  //alert("called menueditorloaded");
 document.arrive(".waitforit", function() {
-  alert("waitforit arrived");
+  //alert("waitforit arrived");
   Array.from(document.getElementsByClassName("waitforit")).forEach(function(element, index){
-debugger;
+//debugger;
     var iconPickerOptions = {searchText: "Buscar...", labelHeader: "{0}/{1}"};
     // sortable list options
     var sortableListOptions = {
@@ -471,6 +485,7 @@ window.netlifinityModules.push({
 });
 
 
+});
 });
 });
 });
