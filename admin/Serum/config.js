@@ -96,12 +96,12 @@ function custom()
    console.log("main script loaded. running custom script");
     window.CMS_MANUAL_INIT = true
 
-    if(window.netlifinityModules && window.netlifinityModules.length > 0)
+    if(window.serumModules && window.serumModules.length > 0)
     {
       
-        for(var m=0; m < window.netlifinityModules.length; m++)
+        for(var m=0; m < window.serumModules.length; m++)
         {
-            collections.push(window.netlifinityModules[m]["config"]);
+            collections.push(window.serumModules[m]["config"]);
         }
     }
   
@@ -148,20 +148,20 @@ function custom()
     }
     initCMS(configurations[env]);
 
-    if(window.netlifinityModules && window.netlifinityModules.length > 0 && CMS && CMS.registerWidget)
+    if(window.serumModules && window.serumModules.length > 0 && CMS && CMS.registerWidget)
     {
-        for(var m=0; m < window.netlifinityModules.length; m++)
+        for(var m=0; m < window.serumModules.length; m++)
         {
-            //alert("registering widget: " + window.netlifinityModules[m]["modulename"]);
+            //alert("registering widget: " + window.serumModules[m]["modulename"]);
             CMS.registerWidget(
-                window.netlifinityModules[m]["modulename"], 
-                createClass(window.netlifinityModules[m]["control"]),
-                createClass(window.netlifinityModules[m]["preview"])
+                window.serumModules[m]["modulename"], 
+                createClass(window.serumModules[m]["control"]),
+                createClass(window.serumModules[m]["preview"])
             );
 
-            if(window.netlifinityModules[m]["callback"])
+            if(window.serumModules[m]["callback"])
             {
-                window.netlifinityModules[m]["callback"]();
+                window.serumModules[m]["callback"]();
             }
         }
     }
