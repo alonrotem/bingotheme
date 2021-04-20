@@ -56,11 +56,12 @@ var menueditorcontrol = {
     alert(this.editor.getString());
     this.props.onChange(this.editor.getString());
   },
+
   addToMenu: function()
   {
     console.log("=========== addToMenu ===========");
     this.editor.add();
-    alert(this.editor.getString());
+    //alert(this.editor.getString());
     this.props.onChange(this.editor.getString());
   },
   render: function() {
@@ -102,7 +103,7 @@ var menueditorcontrol = {
           )
         ),
         h('div', { 'className':'card-footer' },
-          h('button', { 'type':'button', 'id': 'btnUpdate', 'className':'btn btn-primary ml-2', 'disabled':'disabled', 'onClick': this.updateMenu },
+          h('button', { 'type':'button', 'id': 'btnUpdate', 'className':'btn btn-primary ml-2', 'disabled':'disabled' }, //, 'onClick': this.updateMenu
             h('i', {'className': 'fas fa-sync-alt'}),
             h('span', { 'className': 'ml-2' }, 'Update')
           ),
@@ -135,6 +136,24 @@ var menueditorcontrol = {
       
           this.editor.setForm($('#frmEdit'));
           this.editor.setUpdateButton($('#btnUpdate'));
+          $("#btnUpdate").click(this.updateMenu);
+          console.log(MenuEditor.updateButtons);
+
+          //wrap the original function, to capture menu changes
+          var that = this;
+          //var thateditor = that.editor;
+          MenuEditor.updateButtons = (function() {
+            var originalfunct = MenuEditor.updateButtons;
+
+            return function() {
+                // your code
+                //console.log("=== DDDDDD "+thateditor+"===");        
+                originalfunct.apply(this, arguments);
+                that.props.onChange(that.editor.getString());
+                // more of your code
+            };
+        })();
+        
 
       //console.log(editor);
 
@@ -149,7 +168,43 @@ var menueditorcontrol = {
 
 var menueditorPreview = {
   render: function() {
-    return h('div', { "style" : { "backgroundColor" : this.props.value } } );
+    return h('div', {}, this.props.value );
+/*
+Multilevel
+https://bootsnipp.com/snippets/35p8X
+
+https://getbootstrap.com/docs/4.0/components/navbar/
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Features</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Pricing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown link
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+*/
+
   }
 };
 

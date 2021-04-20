@@ -1396,4 +1396,5 @@ function MenuEditor(idSelector, options) {
 MenuEditor.updateButtons = function($mainList) {
     $mainList.find('.btnMove').show();
     $mainList.updateButtons();
+    console.log("===--- updated ---===");
 };
