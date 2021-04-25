@@ -48,12 +48,65 @@ window.loadScript("Serum/Common/bootstrap.bundle.min.js", function(){
 
 var menueditorcontrol = {
   editor: null,
+  loaded: false,
+  componentDidMount: function(){
+    console.log("======== componentDidMount ==========");
+    var iconPickerOptions = {searchText: "Search...", labelHeader: "{0}/{1}"};
+    // sortable list options
+    var sortableListOptions = {
+        placeholderCss: {'background-color': "#cccccc"}
+    };
+    if(!this.editor)
+    {
+      console.log("---- FIRST LOAD ---");
+      this.editor = new MenuEditor('serumMenuEditor', 
+          { 
+          listOptions: sortableListOptions, 
+          iconPicker: iconPickerOptions,
+          maxLevel: 1 // (Optional) Default is -1 (no level limit)
+          // Valid levels are from [0, 1, 2, 3,...N]
+          });
+      
+          this.editor.setForm($('#frmEdit'));
+          this.editor.setUpdateButton($('#btnUpdate'));
+          $("#btnUpdate").click(this.updateMenu);
+          console.log(MenuEditor.updateButtons);
+
+          //wrap the original function, to capture menu changes
+          var that = this;
+          //var thateditor = that.editor;
+          MenuEditor.updateButtons = (function() {
+            var originalfunct = MenuEditor.updateButtons;
+
+            return function() {
+                // your code
+                if(that.loaded)
+                {
+                  console.log("===  CAUGHT AN UPDATE! ===");     
+                  that.props.onChange(that.editor.getString());   
+                }
+                originalfunct.apply(this, arguments);
+                //that.props.onChange(that.editor.getString());
+                // more of your code
+            };
+        })();
+        
+
+      //console.log(editor);
+
+      
+    }
+    console.log("======== filling "+this.props.value+"==========");
+    var arrayjson = this.props.value;//[{"href":"http://home.com","icon":"fas fa-home","text":"Home", "target": "_top", "title": "My Home"},{"icon":"fas fa-chart-bar","text":"Opcion2"},{"icon":"fas fa-bell","text":"Opcion3"},{"icon":"fas fa-crop","text":"Opcion4"},{"icon":"fas fa-flask","text":"Opcion5"},{"icon":"fas fa-map-marker","text":"Opcion6"},{"icon":"fas fa-search","text":"Opcion7","children":[{"icon":"fas fa-plug","text":"Opcion7-1","children":[{"icon":"fas fa-filter","text":"Opcion7-1-1"}]}]}];
+    this.editor.setData(arrayjson);
+    this.loaded = true;
+  },
 
   updateMenu: function()
   {
     console.log("=========== updateMenu ===========");
     this.editor.update();
-    alert(this.editor.getString());
+    //alert(this.editor.getString());
     this.props.onChange(this.editor.getString());
   },
 
@@ -116,59 +169,59 @@ var menueditorcontrol = {
     );
     return ctl;
   },
-  componentDidMount: function(){
-    console.log("======== componentDidMount ==========");
-    var iconPickerOptions = {searchText: "Search...", labelHeader: "{0}/{1}"};
-    // sortable list options
-    var sortableListOptions = {
-        placeholderCss: {'background-color': "#cccccc"}
-    };
-    if(!this.editor)
-    {
-      
-      this.editor = new MenuEditor('serumMenuEditor', 
-          { 
-          listOptions: sortableListOptions, 
-          iconPicker: iconPickerOptions,
-          maxLevel: 2 // (Optional) Default is -1 (no level limit)
-          // Valid levels are from [0, 1, 2, 3,...N]
-          });
-      
-          this.editor.setForm($('#frmEdit'));
-          this.editor.setUpdateButton($('#btnUpdate'));
-          $("#btnUpdate").click(this.updateMenu);
-          console.log(MenuEditor.updateButtons);
-
-          //wrap the original function, to capture menu changes
-          var that = this;
-          //var thateditor = that.editor;
-          MenuEditor.updateButtons = (function() {
-            var originalfunct = MenuEditor.updateButtons;
-
-            return function() {
-                // your code
-                //console.log("=== DDDDDD "+thateditor+"===");        
-                originalfunct.apply(this, arguments);
-                that.props.onChange(that.editor.getString());
-                // more of your code
-            };
-        })();
-        
-
-      //console.log(editor);
-
-      
-    }
-    console.log("======== filling "+this.props.value+"==========");
-    var arrayjson = this.props.value;//[{"href":"http://home.com","icon":"fas fa-home","text":"Home", "target": "_top", "title": "My Home"},{"icon":"fas fa-chart-bar","text":"Opcion2"},{"icon":"fas fa-bell","text":"Opcion3"},{"icon":"fas fa-crop","text":"Opcion4"},{"icon":"fas fa-flask","text":"Opcion5"},{"icon":"fas fa-map-marker","text":"Opcion6"},{"icon":"fas fa-search","text":"Opcion7","children":[{"icon":"fas fa-plug","text":"Opcion7-1","children":[{"icon":"fas fa-filter","text":"Opcion7-1-1"}]}]}];
-    this.editor.setData(arrayjson);
-  }
 };
 
 
 var menueditorPreview = {
+  traverse:function(menuobj, level)
+  {
+    var element;
+    if(menuobj && menuobj.length > 0)
+    {
+      //element = h('ul', { 'className': });
+    }
+  },
+
+  /*
+<ul id="fresponsive" class="nav navbar-nav dropdown">
+  <li class="active"><a href="#">Home</a></li>
+  <li><a href="#">About</a></li>
+  <li><a href="#">service</a></li>
+  <li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle">Submenu 1<span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="#">Lorem ipsum</a></li>
+        <li>
+          <a href="#" data-toggle="dropdown" class="dropdown-toggle">Submenu 2<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Lorem ipsum</a></li>
+            <li><a href="#">Lorem ipsum</a></li>
+            <li>
+              <a href="#" data-toggle="dropdown" class="dropdown-toggle">Submenu 3<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Lorem ipsum</a></li>
+                <li><a href="#">Lorem ipsum</a></li>
+              </ul>
+          </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#Download">lorem ipsum</a></li>        
+</ul>  
+  */
   render: function() {
-    return h('div', {}, this.props.value );
+    var rendered;
+    if(this.props && this.props.value){
+      var value = JSON.parse(this.props.value);
+      rendered = this.traverse(value, 0);
+    }
+    else
+    {
+      rendered = h('div', {}, "No menu yet. Create your first menu item!");
+    }
+    console.log(JSON.parse(this.props.value));
+    
+    return h('div', {}, rendered );
 /*
 Multilevel
 https://bootsnipp.com/snippets/35p8X
