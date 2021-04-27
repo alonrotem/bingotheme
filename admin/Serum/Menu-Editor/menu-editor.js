@@ -171,6 +171,29 @@ var menueditorcontrol = {
   },
 };
 
+window.appendPreviewScript = function(url, callback)
+{
+  //var url = 'Serum/Common/bootstrap.bundle.min.js';
+  var previewFrame = document.getElementById("preview-pane");
+  if(previewFrame && previewFrame.contentDocument)
+  {
+    var head = previewFrame.contentDocument.head;
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+
+    // Then bind the event to the callback function.
+    // There are several events for cross browser compatibility.
+    /*
+    if(callback){
+        script.onreadystatechange = callback;
+        script.onload = callback;
+    }*/
+    console.log("appeding PREVIEW script " + url.substr(url.lastIndexOf("/")+1));
+    // Fire the loading
+    head.appendChild(script);
+  }
+}
 
 var menueditorPreview = {
   traverse:function(menuobj, level)
@@ -210,14 +233,73 @@ var menueditorPreview = {
 </ul>  
   */
   render: function() {
+//if(this.props && this.props.document && this.props.document.head)
+window.appendPreviewScript('Serum/Common/jquery-3.2.1.slim.min.js');
+window.appendPreviewScript('Serum/Common/bootstrap.bundle.min.js');
+
+
     var rendered;
-    if(this.props && this.props.value){
+    if(this.props && this.props.value && this.props.value != {} && this.props.value != "{}"){
       var value = JSON.parse(this.props.value);
       rendered = this.traverse(value, 0);
     }
     else
     {
       rendered = h('div', {}, "No menu yet. Create your first menu item!");
+
+
+      //navbar-expand-sm
+      rendered = h('nav', { 'className': 'navbar navbar-expand-sm navbar-light bg-light' },
+        h('a', { 'className': 'navbar-brand', 'href':'#' }, 'Brand!'),
+        h('button', { 'className': 'navbar-toggler', 'type': 'button', 'data-toggle': 'collapse', 'data-target':'#navbarSupportedContent', 'aria-controls':'navbarSupportedContent', 'aria-expanded':'false', 'aria-label':'Toggle navigation' },
+          h('span', { 'className': 'navbar-toggler-icon'})
+        ),
+        h('div', { 'className':'collapse navbar-collapse', 'id':'navbarSupportedContent' },
+          h('ul', { 'className':'navbar-nav mr-auto' },
+            h('li', { 'className':'nav-item active' },
+              h('a', { 'className':'nav-link', 'href':'#' }, 'Home')
+            )
+          )
+        )
+      );
+      /*
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>      
+      
+      */
     }
     console.log(JSON.parse(this.props.value));
     
@@ -328,7 +410,8 @@ window.serumModules.push({
   "control": menueditorcontrol, 
   "preview": menueditorPreview,
   "config": menurdidorconfig,
-  "callback": menueditorloaded
+  "callback": null,
+  "previewCSS": []
 });
 
 

@@ -148,6 +148,8 @@ function custom()
     }
     initCMS(configurations[env]);
 
+    CMS.registerPreviewStyle("Serum/Common/bootstrap.min.css");
+
     if(window.serumModules && window.serumModules.length > 0 && CMS && CMS.registerWidget)
     {
         for(var m=0; m < window.serumModules.length; m++)
@@ -162,6 +164,15 @@ function custom()
             if(window.serumModules[m]["callback"])
             {
                 window.serumModules[m]["callback"]();
+            }
+
+            if(window.serumModules[m]["previewCSS"] && window.serumModules[m]["previewCSS"] != [])
+            {
+                //TODO: Keep track on registered css, to exclude repetitions
+                for(var p=0; p < window.serumModules[m]["previewCSS"].length; p++)
+                {
+                    CMS.registerPreviewStyle(window.serumModules[m]["previewCSS"][p]);
+                }
             }
         }
     }
