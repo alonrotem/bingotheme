@@ -196,6 +196,10 @@ window.appendPreviewScript = function(url, callback)
 }
 
 var menueditorPreview = {
+/*
+[{"text":"Home","href":"http://home.com","icon":"fas fa-home","target":"_top","title":"My Home","children":[{"text":"Opcion2","href":"","icon":"fas fa-chart-bar","target":"_self","title":""},{"text":"Opcion3","href":"","icon":"fas fa-bell","target":"_self","title":""}]},{"text":"Opcion4","href":"","icon":"fas fa-crop","target":"_self","title":""},{"text":"Opcion5","href":"","icon":"fas fa-flask","target":"_self","title":""},{"text":"Opcion6","href":"","icon":"fas fa-map-marker","target":"_self","title":""},{"text":"Opcion7","href":"","icon":"fas fa-search","target":"_self","title":"","children":[{"text":"Opcion7-1","href":"","icon":"fas fa-plug","target":"_self","title":"","children":[{"text":"Opcion7-1-1","href":"","icon":"fas fa-filter","target":"_self","title":""}]}]},{"text":"testttt","href":"#mynew","icon":"","target":"_self","title":""}]
+*/      
+
   traverse:function(menuobj, level)
   {
     var element;
@@ -239,11 +243,13 @@ window.appendPreviewScript('Serum/Common/bootstrap.bundle.min.js');
 
 
     var rendered;
+    /*
     if(this.props && this.props.value && this.props.value != {} && this.props.value != "{}"){
       var value = JSON.parse(this.props.value);
       rendered = this.traverse(value, 0);
     }
     else
+    */
     {
       rendered = h('div', {}, "No menu yet. Create your first menu item!");
 
@@ -301,7 +307,8 @@ window.appendPreviewScript('Serum/Common/bootstrap.bundle.min.js');
       
       */
     }
-    console.log(JSON.parse(this.props.value));
+    //console.log(JSON.parse(this.props.value));
+    console.log("preview" + this.props.value);
     
     return h('div', {}, rendered );
 /*
