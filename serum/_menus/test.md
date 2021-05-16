@@ -1,6 +1,6 @@
 ---
 hidden: true
-title: test
+title: Big menu
 menu: '[{"text":"Home","href":"http://home.com","icon":"fas
   fa-home","target":"_top","title":"My
   Home"},{"text":"Opcion2","href":"","icon":"fas

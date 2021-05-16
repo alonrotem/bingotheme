@@ -50,6 +50,7 @@ var menueditorcontrol = {
   editor: null,
   loaded: false,
   componentDidMount: function(){
+    this.loaded = false;
     console.log("======== componentDidMount ==========");
     var iconPickerOptions = {searchText: "Search...", labelHeader: "{0}/{1}"};
     // sortable list options
@@ -70,7 +71,7 @@ var menueditorcontrol = {
           this.editor.setForm($('#frmEdit'));
           this.editor.setUpdateButton($('#btnUpdate'));
           $("#btnUpdate").click(this.updateMenu);
-          console.log(MenuEditor.updateButtons);
+          //console.log(MenuEditor.updateButtons);
 
           //wrap the original function, to capture menu changes
           var that = this;
@@ -83,9 +84,27 @@ var menueditorcontrol = {
                 if(that.loaded)
                 {
                   console.log("===  CAUGHT AN UPDATE! ===");     
-                  that.props.onChange(that.editor.getString());   
+                  console.log("EDITOR: " + that.editor.getString());
+                  console.log("PROP VALUE: " + that.props.value);
+                  if(that.editor.getString() == that.props.value)
+                  {
+                    console.log("===  (Not really an update...) ===");
+                  }
+                  else
+                  {
+                    console.log("===  (REALLY UPDATED!) ===");
+                  }
+                  //that.props.onChange(that.editor.getString());   
+                }
+                else
+                {
+                  //that.loaded = true;
                 }
                 originalfunct.apply(this, arguments);
+                if(!that.loaded)
+                {
+                  that.loaded = true;
+                }
                 //that.props.onChange(that.editor.getString());
                 // more of your code
             };
@@ -96,10 +115,12 @@ var menueditorcontrol = {
 
       
     }
+    this.loaded = false;
     console.log("======== filling "+this.props.value+"==========");
     var arrayjson = this.props.value;//[{"href":"http://home.com","icon":"fas fa-home","text":"Home", "target": "_top", "title": "My Home"},{"icon":"fas fa-chart-bar","text":"Opcion2"},{"icon":"fas fa-bell","text":"Opcion3"},{"icon":"fas fa-crop","text":"Opcion4"},{"icon":"fas fa-flask","text":"Opcion5"},{"icon":"fas fa-map-marker","text":"Opcion6"},{"icon":"fas fa-search","text":"Opcion7","children":[{"icon":"fas fa-plug","text":"Opcion7-1","children":[{"icon":"fas fa-filter","text":"Opcion7-1-1"}]}]}];
+    
     this.editor.setData(arrayjson);
-    this.loaded = true;
+    //this.loaded = true;
   },
 
   updateMenu: function()
@@ -237,6 +258,7 @@ var menueditorPreview = {
 </ul>  
   */
   render: function() {
+    console.log("RENDERING PREVIEW!");
 //if(this.props && this.props.document && this.props.document.head)
 window.appendPreviewScript('Serum/Common/jquery-3.2.1.slim.min.js');
 window.appendPreviewScript('Serum/Common/bootstrap.bundle.min.js');
