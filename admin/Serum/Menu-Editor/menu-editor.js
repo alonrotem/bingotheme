@@ -253,6 +253,61 @@ window.appendPreviewScript('Serum/Common/bootstrap.bundle.min.js');
     {
       rendered = h('div', {}, "No menu yet. Create your first menu item!");
 
+      //JSON.parse(this.props.value)[7]
+      /*
+        preview[{"text":"Home","href":"http://home.com","icon":"fas fa-home","target":"_top","title":"My Home"},{"text":"Opcion2","href":"","icon":"fas fa-chart-bar","target":"_self","title":""},{"text":"Opcion3","href":"","icon":"fas fa-bell","target":"_self","title":""},{"text":"Opcion4","href":"","icon":"fas fa-crop","target":"_self","title":""},{"text":"Opcion5","href":"","icon":"fas fa-flask","target":"_self","title":""},{"text":"Opcion6","href":"","icon":"fas fa-map-marker","target":"_self","title":""},{"text":"Opcion7","href":"","icon":"fas fa-search","target":"_self","title":"","children":[{"text":"Opcion7-1","href":"","icon":"fas fa-plug","target":"_self","title":"","children":[{"text":"Opcion7-1-1","href":"","icon":"fas fa-filter","target":"_self","title":""}]}]},{"text":"testttt","icon":"","href":"#mynew","target":"_self","title":""}]
+
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>        
+      */
+      var items = JSON.parse(this.props.value);
+      var remderedMenuItems = [];
+      for(var i=0; i < items.length; i++){
+        var children = items[i].children;
+        var childrenItems = [];
+        var childrenContainer = null;
+        var rendereddItemProps = {
+          'className': (children)?'nav-item dropdown': 'nav-item'
+        };
+        var renderedLinkProps = {
+          'className': (children)?'nav-link dropdown-toggle': 'nav-link'
+        };
+        if(children)
+        {
+          renderedLinkProps['href']="#";
+          renderedLinkProps['role']="button";
+          renderedLinkProps['data-toggle']="dropdown";
+          renderedLinkProps['aria-haspopup']="true";
+          renderedLinkProps['aria-expanded']="false";
+          for(var c=0; c < children.length; c++)
+          {
+            childrenItems.push(
+              h('a', 
+              {
+                'className': 'dropdown-item', 
+                'href':children[c].href, 
+                'target': children[c].target
+              }, 
+              children[c].text
+            ));
+          }
+          childrenContainer = h('div', {'className':'dropdown-menu', 'aria-labelledby':'navbarDropdown'}, childrenItems);
+        }
+        
+        remderedMenuItems.push(h('li', rendereddItemProps, 
+          h('a', renderedLinkProps, items[i].text ),
+          childrenContainer));
+      }
 
       //navbar-expand-sm
       rendered = h('nav', { 'className': 'navbar navbar-expand-sm navbar-light bg-light' },
@@ -261,10 +316,11 @@ window.appendPreviewScript('Serum/Common/bootstrap.bundle.min.js');
           h('span', { 'className': 'navbar-toggler-icon'})
         ),
         h('div', { 'className':'collapse navbar-collapse', 'id':'navbarSupportedContent' },
-          h('ul', { 'className':'navbar-nav mr-auto' },
-            h('li', { 'className':'nav-item active' },
-              h('a', { 'className':'nav-link', 'href':'#' }, 'Home')
-            )
+          h('ul', { 'className':'navbar-nav mr-auto' }, remderedMenuItems
+          
+          //  h('li', { 'className':'nav-item active' },
+          //    h('a', { 'className':'nav-link', 'href':'#' }, 'Home')
+          //  )
           )
         )
       );
